@@ -26,7 +26,7 @@ public class PagamentoService {
 	
 		return pagamentoRepository
 				.findAll(paginacao)
-				.map(pagina->modelMapper.map(paginacao, PagamentoDto.class));
+				.map(pagina->modelMapper.map(pagina, PagamentoDto.class));
 				
 	}
 	
