@@ -23,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.alurafood.pagamentos.dto.PagamentoDto;
 import br.com.alurafood.pagamentos.service.PagamentoService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @RestController
 @RequestMapping("/pagamentos")
@@ -63,9 +64,15 @@ public class PagamentoController {
         return ResponseEntity.noContent().build();
     }
     
+    
     @PatchMapping("/{id}/confirmar")
+    @CircuitBreaker(name="atualizaPedido",fallbackMethod = "pagamentoAutorizadoComIntegracaoPendente")
     public void confirmarPagamento(@PathVariable @NotNull Long id) {
     	
     	pagamentoService.confirmarPagamento(id);
+    }
+    
+    public void pagamentoAutorizadoComIntegracaoPendente(Long id, Exception e) {
+    	pagamentoService.alterarStatus(id);
     }
 }
