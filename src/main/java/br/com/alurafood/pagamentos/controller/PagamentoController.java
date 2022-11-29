@@ -39,8 +39,14 @@ public class PagamentoController {
 	}
 	
 	@GetMapping("/{id}")
+	@CircuitBreaker(name = "buscaItensDoPedido", fallbackMethod = "buscaPagamentoSemItensDoPedido")
 	public ResponseEntity<PagamentoDto> detalhar(@PathVariable @NotNull Long id) { 
 		PagamentoDto dto = pagamentoService.obterPorId(id);
+		return ResponseEntity.ok(dto);
+	}
+	
+	public ResponseEntity<PagamentoDto> buscaPagamentoSemItensDoPedido(@PathVariable @NotNull Long id, Exception e) { 
+		PagamentoDto dto = pagamentoService.obterPorIdSemItensDoPedido(id);
 		return ResponseEntity.ok(dto);
 	}
 	
