@@ -60,7 +60,7 @@ public class PagamentoController {
         URI endereco = uriBuilder.path("/pagamentos/{id}").buildAndExpand(pagamento.getId()).toUri();
 
         
-        rabbitTemplate.convertAndSend("pagamentos.ex", pagamento);
+        rabbitTemplate.convertAndSend("pagamentos.ex","", pagamento);
         
         return ResponseEntity.created(endereco).body(pagamento);
     }
